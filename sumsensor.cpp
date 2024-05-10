@@ -78,45 +78,47 @@ void sumsensor::sumdata()
 }
 void sumsensor::dealthetft()
 {
+    play_record_flag--;
     // send signal to the tft screen
     // 除了在睡觉，静止的时候都不能打断。
     // 根据传感器信息判断该进入哪个表情，并给帧数赋值
+    // TODO 帧数待定义
     if (mode_flag == 1 || mode_flag == 0)
     {
         if (being_shaked)
         {
             mode_flag = 2;
-            play_record_flag = 100;
+            play_record_flag = 10;
         }
         else if (Pin1_mode == 2)
         {
             mode_flag = 3;
-            play_record_flag = 100;
+            play_record_flag = 10;
         }
         else if (Pin1_mode == 1)
         {
             mode_flag = 4;
-            play_record_flag = 100;
+            play_record_flag = 10;
         }
         else if (Pin2_mode == 1 && Pin3_mode == 1)
         {
             mode_flag = 5;
-            play_record_flag = 100;
+            play_record_flag = 10;
         }
         else if (Pin2_mode == 1 && Pin3_mode == 0)
         {
             mode_flag = 6;
-            play_record_flag = 100;
+            play_record_flag = 10;
         }
         else if (Pin2_mode == 0 && Pin3_mode == 1)
         {
             mode_flag = 7;
-            play_record_flag = 100;
+            play_record_flag = 10;
         }
         else if (falling)
         {
             mode_flag = 8;
-            play_record_flag = 100;
+            play_record_flag = 10;
         }
     }
     // being_shaked 最优先: 晕
@@ -158,7 +160,6 @@ void sumsensor::dealthetft()
         // 根据传感器数据判断表情
         // 可能变化，也可能不变化
     }
-    play_record_flag--;
     refresh();
 }
 void sumsensor::dataprint()

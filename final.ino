@@ -35,6 +35,7 @@ bool mpu_able = true;
 SoftSPI W25Q64 = SoftSPI(SOFTSPI_SCK, SOFTSPI_MISO, SOFTSPI_MOSI, SOFTSPI_CS);
 soursepush sp;
 sumsensor ss;
+Display dp;
 
 #include <avr/pgmspace.h>
 
@@ -82,8 +83,8 @@ void setup()
     else
       delay(500);
   }
-
   Serial.println("setup end!");
+  // being display
 
   // TODO: 开机动画
 }
