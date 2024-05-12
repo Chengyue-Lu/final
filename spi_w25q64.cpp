@@ -2,24 +2,24 @@
 
 #include "spi_w25q64.h"
 
-void SoftSPI::pin_init(uint8_t sck, uint8_t miso, uint8_t mosi, uint8_t cs)
+void SoftSPI::pin_init(uint8_t sck, uint8_t miso, uint8_t mosi, uint8_t cs) // 初始化引脚
 {
     pinMode(sck, OUTPUT);
     pinMode(miso, INPUT);
     pinMode(mosi, OUTPUT);
     pinMode(cs, OUTPUT);
 }
-void SoftSPI::data_init()
+void SoftSPI::data_init() // 初始化数据
 {
     SOFTSPI_CS_HIGH;
     SOFTSPI_SCK_LOW;
     SOFTSPI_MOSI_LOW;
 }
-uint8_t SoftSPI::Read_DO_Level(void)
+uint8_t SoftSPI::Read_DO_Level(void) // 读取DO电平
 {
     return digitalRead(SOFTSPI_MISO);
 }
-uint8_t SoftSPI::SPI_SendByte(uint8_t data)
+uint8_t SoftSPI::SPI_SendByte(uint8_t data) // SPI发送单字节数据
 {
     uint8_t i;
     uint8_t Outdata = 0x00;
@@ -43,19 +43,19 @@ uint8_t SoftSPI::SPI_SendByte(uint8_t data)
     }
     return Outdata;
 }
-void SoftSPI::WriteEnable(void)
+void SoftSPI::WriteEnable(void) // 写使能
 {
     SOFTSPI_CS_LOW;
     SPI_SendByte(W25Q64_Write_Enable);
     SOFTSPI_CS_HIGH;
 }
-void SoftSPI::WriteDisable(void)
+void SoftSPI::WriteDisable(void) // 写禁止
 {
     SOFTSPI_CS_LOW;
     SPI_SendByte(W25Q64_Write_Disable);
     SOFTSPI_CS_HIGH;
 }
-void SoftSPI::WaitForBusyStatus(void)
+void SoftSPI::WaitForBusyStatus(void) // 等待忙状态结束
 {
     uint16_t Timeout = 0xFFFF;
     SOFTSPI_CS_LOW;
@@ -76,7 +76,7 @@ void SoftSPI::WaitForBusyStatus(void)
     }
     SOFTSPI_CS_HIGH;
 }
-void SoftSPI::SectorErase(uint32_t Sector_Address)
+void SoftSPI::SectorErase(uint32_t Sector_Address) // 扇区擦除
 {
     WriteEnable(); // W25Q64写使能
     SOFTSPI_CS_LOW;
@@ -88,7 +88,7 @@ void SoftSPI::SectorErase(uint32_t Sector_Address)
     WaitForBusyStatus(); // 等待 W25Q64 芯片的忙状态结束
     WriteDisable();      // W25Q64禁止写使能
 }
-void SoftSPI::PageWrite(uint32_t address, uint8_t *data, uint16_t dataSize)
+void SoftSPI::PageWrite(uint32_t address, uint8_t *data, uint16_t dataSize) // 页写入
 {
     WriteEnable(); // W25Q64写使能
     SOFTSPI_CS_LOW;
@@ -107,7 +107,7 @@ void SoftSPI::PageWrite(uint32_t address, uint8_t *data, uint16_t dataSize)
     WaitForBusyStatus(); // 等待 W25Q64 芯片的忙状态结束
     WriteDisable();      // W25Q64禁止写使能
 }
-void SoftSPI::ReadData(uint32_t address, uint8_t *data, uint16_t dataSize)
+void SoftSPI::ReadData(uint32_t address, uint8_t *data, uint16_t dataSize) // 读取数据
 {
     uint16_t i;
     SOFTSPI_CS_LOW;

@@ -3,11 +3,13 @@
 
 #include <Arduino.h>
 
+// 定义引脚
 #define SOFTSPI_SCK 5
 #define SOFTSPI_MISO 6
 #define SOFTSPI_MOSI 7
 #define SOFTSPI_CS 8
 
+// 定义引脚操作
 #define SOFTSPI_CS_HIGH digitalWrite(SOFTSPI_CS, HIGH)
 #define SOFTSPI_CS_LOW digitalWrite(SOFTSPI_CS, LOW)
 #define SOFTSPI_SCK_HIGH digitalWrite(SOFTSPI_SCK, HIGH)
