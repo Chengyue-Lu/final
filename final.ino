@@ -62,9 +62,11 @@ void setup()
   tft.fillScreen(ST7735_BLACK);
   Serial.println("TFT seccessful!");
   // begin mpu
-  if (!mpu.begin()) {
+  if (!mpu.begin())
+  {
     Serial.println("Failed to find MPU6050 chip");
-    while (1) {
+    while (1)
+    {
       delay(10);
     }
   }
@@ -76,7 +78,7 @@ void setup()
   // set filter bandwidth to 21 Hz
   mpu.setFilterBandwidth(MPU6050_BAND_21_HZ);
   delay(100);
-  
+
   // begin w25q64
   W25Q64.pin_init(SOFTSPI_SCK, SOFTSPI_MISO, SOFTSPI_MOSI, SOFTSPI_CS);
   for (int i = 0; i < 3; i++)
@@ -106,7 +108,6 @@ void setup()
   delay(150);
   dp.clear_screen();
   dp.dp1(15, ST7735_WHITE);
-
 
   // display white
   // for (int i = 0; i < 31; i++)
@@ -154,7 +155,6 @@ void TimeProc()
     // test();
 
     clock();
-
   }
   // 100ms执行一次
   if ((millis() - _100msLastTime) >= _100msTime)
