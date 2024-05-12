@@ -61,17 +61,17 @@ void sumsensor::sumdata()
     getmpudata();
     getpressdata();
     accnorm = sqrt(sumacc[0] * sumacc[0] + sumacc[1] * sumacc[1] + sumacc[2] * sumacc[2]);
-    if (sumpress[0] > 1000 && sumpress[0] < 5000 && Pin1_mode != 2)
+    if (sumpress[0] > 1000 && sumpress[0] < 2500 && Pin1_mode != 2)
         Pin1_mode = 1;
-    else if (sumpress[0] > 5000)
+    else if (sumpress[0] > 2500)
         Pin1_mode = 2;
 
-    if (sumpress[1] < 9000)
+    if (sumpress[1] < 9400 && sumpress[1] > 500)
         Pin2_mode = 1;
-    if (sumpress[2] < 9000)
+    if (sumpress[2] < 9700 && sumpress[2] > 500)
         Pin3_mode = 1;
 
-    if (accnorm > 13)
+    if (accnorm > 16)
         being_shaked = true;
     else if (accnorm < 5)
         falling = true;
@@ -83,44 +83,52 @@ void sumsensor::dealthetft()
     // 除了在睡觉，静止的时候都不能打断。
     // 根据传感器信息判断该进入哪个表情，并给帧数赋值
     // TODO 帧数待定义
+
+
     if (mode_flag == 1 || mode_flag == 0)
     {
         if (being_shaked)
         {
             mode_flag = 2;
-            play_record_flag = 10;
+            play_record_flag = 42;
         }
+        
         else if (Pin1_mode == 2)
         {
             mode_flag = 3;
-            play_record_flag = 10;
+            play_record_flag = 30;
         }
         else if (Pin1_mode == 1)
         {
             mode_flag = 4;
-            play_record_flag = 10;
+            play_record_flag = 18;
         }
         else if (Pin2_mode == 1 && Pin3_mode == 1)
         {
             mode_flag = 5;
-            play_record_flag = 10;
+            play_record_flag = 30;
         }
         else if (Pin2_mode == 1 && Pin3_mode == 0)
         {
-            mode_flag = 6;
-            play_record_flag = 10;
+            mode_flag = 7;
+            play_record_flag = 30;
         }
         else if (Pin2_mode == 0 && Pin3_mode == 1)
         {
-            mode_flag = 7;
-            play_record_flag = 10;
+            mode_flag = 6;
+            play_record_flag = 30;
         }
-        else if (falling)
-        {
-            mode_flag = 8;
-            play_record_flag = 10;
-        }
+
+
+        // else if (falling)
+        // {
+        //     mode_flag = 8;
+        //     play_record_flag = 10;
+        // }
     }
+
+
+
     // being_shaked 最优先: 晕
     // Pin1_mode 优先级第二： 疼痛，舒服
     // Pin2_mode 和 Pin3_mode 优先级第三：捏脸/朝左看/朝右看
@@ -132,7 +140,7 @@ void sumsensor::dealthetft()
         if (play_record_flag == 0)
         {
             mode_flag = 0;
-            play_record_flag = 100;
+            play_record_flag = 60;
             // 转移成待机模式
         }
         else
@@ -146,12 +154,11 @@ void sumsensor::dealthetft()
         if (play_record_flag == 0)
         {
             mode_flag = 1;
-            play_record_flag = 1000000000;
+            play_record_flag = 100;
         }
         else
         {
-            // 根据传感器数据判断表情
-            // 可能变化，也可能不变化
+            // 继续播放表情
         }
     }
 
@@ -159,6 +166,14 @@ void sumsensor::dealthetft()
     {
         // 根据传感器数据判断表情
         // 可能变化，也可能不变化
+        if (play_record_flag == 0)
+        {
+            mode_flag = 0;
+            play_record_flag = 60;
+        }
+        else {
+            // 继续播放表情
+        }
     }
     refresh();
 }

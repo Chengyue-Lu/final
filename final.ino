@@ -62,15 +62,21 @@ void setup()
   tft.fillScreen(ST7735_BLACK);
   Serial.println("TFT seccessful!");
   // begin mpu
-  if (!mpu.begin())
-  {
-    mpu_able = false; // If MPU6050 initialization fails, update flag
+  if (!mpu.begin()) {
     Serial.println("Failed to find MPU6050 chip");
+    while (1) {
+      delay(10);
+    }
   }
-  else
-  {
-    Serial.println("MPU6050 seccessful!");
-  }
+  Serial.println("MPU6050 Found!");
+  // set accelerometer range to +-8G
+  mpu.setAccelerometerRange(MPU6050_RANGE_8_G);
+  // set gyro range to +- 500 deg/s
+  mpu.setGyroRange(MPU6050_RANGE_500_DEG);
+  // set filter bandwidth to 21 Hz
+  mpu.setFilterBandwidth(MPU6050_BAND_21_HZ);
+  delay(100);
+  
   // begin w25q64
   W25Q64.pin_init(SOFTSPI_SCK, SOFTSPI_MISO, SOFTSPI_MOSI, SOFTSPI_CS);
   for (int i = 0; i < 3; i++)
@@ -87,6 +93,50 @@ void setup()
   // being display
 
   // TODO: 开机动画
+
+  dp.clear_screen();
+  delay(1000);
+  dp.dp1(12, ST7735_WHITE);
+  delay(550);
+  dp.clear_screen();
+  dp.dp1(13, ST7735_WHITE);
+  delay(250);
+  dp.clear_screen();
+  dp.dp1(14, ST7735_WHITE);
+  delay(150);
+  dp.clear_screen();
+  dp.dp1(15, ST7735_WHITE);
+
+
+  // display white
+  // for (int i = 0; i < 31; i++)
+  // {
+  //   dp.clear_screen();
+  //   dp.dp1(i, ST7735_WHITE);
+  //   delay(500);
+  // }
+  delay(2000);
+
+  mode_flag = 0;
+  play_record_flag = 61;
+
+  // for (int i = 0; i < 38; i++)
+  // {
+  //   dp.clear_screen();
+  //   dp.dp1(i, ST7735_WHITE);
+  //   delay(500);
+  // }
+
+  // delay(1000000);
+
+  // mode_flag = 7;
+  // play_record_flag = 31;
+
+  // 烧录
+  // sp.soursew25q64(37, data, 0x000010);
+  // delay(1000);
+  // sp.sourseread(37, data, 0x000010);
+  // sp.sourseread(37, data, 0x000000);
 }
 
 void loop()
@@ -99,23 +149,27 @@ void TimeProc()
   // 1s执行一次
   if ((millis() - _1sLastTime) >= _1sTime)
   {
-
     _1sLastTime = millis();
     c++;
     // test();
+
     clock();
+
   }
   // 100ms执行一次
   if ((millis() - _100msLastTime) >= _100msTime)
   {
+    // Serial.println(play_record_flag);
     _100msLastTime = millis();
-    ss.sumdata();
+    ss.dealthetft();
+    dp.total_display();
     ss.dataprint();
     b++;
   }
   // 10ms执行一次
   if ((millis() - _10msLastTime) >= _10msTime)
   {
+    ss.sumdata();
     _10msLastTime = millis();
     a++;
   }
